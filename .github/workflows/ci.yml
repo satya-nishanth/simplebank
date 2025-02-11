@@ -1,0 +1,25 @@
+name: ci-test
+
+on:
+  push:
+    branches: [ "satya" ]
+  pull_request:
+    branches: [ "satya" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.23'
+    - name: Setup DB
+      run: |
+        make postgres
+        sleep 10
+        make createdb
+    - name: Test
+      run: make test
